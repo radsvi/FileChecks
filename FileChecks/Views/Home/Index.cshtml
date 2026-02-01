@@ -1,0 +1,20 @@
+﻿@{
+	ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Home Page</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+
+<body>
+	<div class="form-group mt-3">
+		<form asp-controller="FolderCheck" asp-action="Index" method="get">
+			<input type="submit" value="Scan files" class="btn btn-primary" />
+		</form>
+	</div>
+</body>
+</html>
