@@ -1,28 +1,44 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FileChecks.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace FileChecks.Controllers
 {
     public class FolderCheckController : Controller
     {
+        //[HttpPost]
+        //public IActionResult Open()
+        //{
+        //    string path = @"C:\MyFolder";
+
+        //    Process.Start(new ProcessStartInfo
+        //    {
+        //        FileName = "explorer.exe",
+        //        Arguments = path,
+        //        UseShellExecute = true
+        //    });
+
+        //    return RedirectToAction("Index");
+        //}
         [HttpPost]
-        public IActionResult Open()
+        public IActionResult Index(string folderPath)
         {
-            string path = @"C:\MyFolder";
+            var versionManager = new VersionManager(folderPath);
 
-            Process.Start(new ProcessStartInfo
+            if (ModelState.IsValid)
             {
-                FileName = "explorer.exe",
-                Arguments = path,
-                UseShellExecute = true
-            });
+                versionManager.ScanFolder();
+            }
 
-            return RedirectToAction("Index");
+            return View(versionManager);
         }
 
         public IActionResult Index()
         {
-            return View();
+            var versionManager = new VersionManager(string.Empty);
+            versionManager.ScanFolder();
+
+            return View(versionManager);
         }
     }
 }

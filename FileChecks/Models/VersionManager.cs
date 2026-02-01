@@ -4,7 +4,20 @@ namespace FileChecks.Models
 {
     public class VersionManager
     {
-        string _rootPath = "C:\\MyFolder";
+        string _rootPath;
+        public string Vystup { get; private set; } = string.Empty;
+
+        public VersionManager(string folderPath)
+        {
+#warning dodelat folderPath
+            _rootPath = "C:\\MyFolder";
+        }
+
+        public void ScanFolder()
+        {
+            Vystup = "sample text";
+        }
+
         public void Browse(string? path)
         {
             var root = _rootPath;
