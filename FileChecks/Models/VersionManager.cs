@@ -10,7 +10,7 @@ namespace FileChecks.Models
 
         public string? SafePath { get; private set; }
         public DirectoryViewModel? Content { get; private set; }
-        public string SubFolderPath { get; private set; } = string.Empty;
+        public string? SubFolderPath { get; private set; }
         public IReadOnlyList<IVersionInfo>? StoredVersions { get; set; }
         public List<string?> CheckedFolders { get; private set; } = [];
 
@@ -19,7 +19,7 @@ namespace FileChecks.Models
             this.hashStore = hashStore;
         }
 
-        public void Start(string subFolderPath)
+        public void Start(string? subFolderPath)
         {
             const string rootPath = "C:\\MyFolder";
 

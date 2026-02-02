@@ -27,7 +27,7 @@ namespace FileChecks.Controllers
         //    return RedirectToAction("Index");
         //}
         [HttpPost]
-        public IActionResult Index(string folderPath)
+        public IActionResult Index(string? folderPath)
         {
             var versionManager = _factory.Create();
 
