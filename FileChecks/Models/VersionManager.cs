@@ -1,4 +1,5 @@
 ﻿using FileChecks.ViewModels;
+using System.Security.Cryptography;
 
 namespace FileChecks.Models
 {
@@ -10,6 +11,7 @@ namespace FileChecks.Models
 
         public string? SafePath { get; private set; }
         public DirectoryViewModel? Content { get; private set; }
+        public List<FileVersionInfo>? StoredVersions { get; set; }
 
         public VersionManager(IHashStore hashStore)
         {
@@ -25,12 +27,19 @@ namespace FileChecks.Models
 
             StoreVersions();
 
-
+            hashStore.GetAll();
         }
 
         private void StoreVersions()
         {
-            
+
+            // Content
+            if (Content == null) throw new NullReferenceException($"{nameof(Content)} is null");
+
+            foreach (var entry in Content.Files)
+            {
+                this.hashStore.Upsert(entry);
+            }
         }
 
         public void ScanFolder(string? path)
@@ -56,7 +65,8 @@ namespace FileChecks.Models
                             Name = info.Name,
                             FullName = info.FullName,
                             Size = info.Length,
-                            LastModified = info.LastWriteTime
+                            LastModified = info.LastWriteTime,
+                            Hash = SHA256.HashData(File.OpenRead(info.FullName))
                         };
                     })
                     .ToList()

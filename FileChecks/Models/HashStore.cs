@@ -4,10 +4,9 @@ namespace FileChecks.Models
 {
     public interface IHashStore
     {
-        void Add(FileVersionInfo file);
         IReadOnlyList<FileVersionInfo> GetAll();
-        void Load();
-        void Update(FileVersionInfo file);
+        //void Load();
+        void Upsert(FileItemViewModel file);
     }
 
     public class HashStore : IHashStore
@@ -15,7 +14,7 @@ namespace FileChecks.Models
         private readonly object _lock = new();
         private readonly string _filePath;
 
-        private List<FileVersionInfo> Content { get; set; } = new();
+        private List<FileVersionInfo> _content = new();
 
         public HashStore(IHostEnvironment env)
         {
@@ -24,42 +23,67 @@ namespace FileChecks.Models
 
             _filePath = Path.Combine(dataDir, "file-hashes.json");
         }
-        private void Save()
+        private void SaveUnsafe()
         {
-            var json = JsonSerializer.Serialize(Content);
+            var json = JsonSerializer.Serialize(_content);
             File.WriteAllText(_filePath, json);
         }
-        public void Load()
+        
+        private void Load()
         {
             if (!File.Exists(_filePath))
                 return;
 
             var json = File.ReadAllText(_filePath);
-            Content = JsonSerializer.Deserialize<List<FileVersionInfo>>(json) ?? new();
+            _content = JsonSerializer.Deserialize<List<FileVersionInfo>>(json) ?? new();
 
         }
         public IReadOnlyList<FileVersionInfo> GetAll()
         {
             lock (_lock)
             {
-                return Content.ToList();
+                return _content;
             }
         }
-        public void Add(FileVersionInfo file)
+        public void Upsert(FileItemViewModel file)
         {
             lock (_lock)
             {
-                Content.Add(file);
-                Save();
+                Load();
+
+                var existing = _content.FirstOrDefault(f => f.FullName == file.FullName);
+
+                if (existing is null)
+                {
+                    var entry = new FileVersionInfo
+                    {
+                        FullName = file.FullName,
+                        Name = file.Name,
+                        Hash = file.Hash,
+                        Size = file.Size,
+                        LastModified = file.LastModified,
+                    };
+
+                    _content.Add(entry);
+                }
+                else
+                {
+                    existing.LastModified = file.LastModified;
+                    existing.Hash = file.Hash;
+                    existing.Size = file.Size;
+                    existing.Version++;
+                }
+
+                SaveUnsafe();
             }
         }
-        public void Update(FileVersionInfo file)
-        {
-            lock (_lock)
-            {
-                Content.Add(file);
-                Save();
-            }
-        }
+        //public void Update(FileVersionInfo file)
+        //{
+        //    lock (_lock)
+        //    {
+        //        Content.Add(file);
+        //        Save();
+        //    }
+        //}
     }
 }

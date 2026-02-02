@@ -15,24 +15,29 @@
 	<h4>VersionManager</h4>
 	<hr />
 	<h3>Current folders:</h3>
-	<div>
-		<ul>
-
-			@foreach (var item in Model.Content.Directories)
-			{
-				<li>@item</li>
-			}
-		</ul>
-	</div>
+	@if (Model.Content?.Directories?.Any() == true)
+	{
+		<div>
+			<ul>
+				@foreach (var item in Model.Content.Directories)
+				{
+					<li>@item</li>
+				}
+			</ul>
+		</div>
+	}
 	<h3>Current files:</h3>
-	<div>
-		<ul>
-			@foreach (var item in Model.Content.Files)
-			{
-				<li>@item.FullName</li>
-			}
-		</ul>
-	</div>
+	@if (Model.Content?.Files?.Any() == true)
+	{
+		<div>
+			<ul>
+				@foreach (var item in Model.Content.Files)
+				{
+					<li>@item.FullName</li>
+				}
+			</ul>
+		</div>
+	}
 
 
 	@section Scripts {
