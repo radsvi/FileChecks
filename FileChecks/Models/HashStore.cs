@@ -70,18 +70,12 @@ namespace FileChecks.Models
                     existing.LastModified = file.LastModified;
                     existing.Size = file.Size;
                     
-                    if (existing.Hash is not null && file.Hash is not null)
+                    if (!existing.Hash.SequenceEqual(file.Hash))
                     {
-                        if (existing.Hash.SequenceEqual(file.Hash))
-                        {
-                            existing.Hash = file.Hash;
-                            existing.Version++;
-                        }
+                        existing.Hash = file.Hash;
+                        existing.Version++;
                     }
-                    else
-                    {
-
-                    }
+                    
 
                 }
 
