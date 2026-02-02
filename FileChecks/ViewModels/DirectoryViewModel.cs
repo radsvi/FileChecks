@@ -10,7 +10,7 @@ namespace FileChecks.ViewModels
         public IReadOnlyList<string?> Directories { get; set; }
             = [];
 
-        public IReadOnlyList<FileItemViewModel> Files { get; set; }
-            = Array.Empty<FileItemViewModel>();
+        public IReadOnlyList<FileSystemEntry> Files { get; set; }
+            = Array.Empty<FileSystemEntry>();
     }
 }

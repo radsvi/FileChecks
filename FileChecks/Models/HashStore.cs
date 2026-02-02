@@ -4,9 +4,9 @@ namespace FileChecks.Models
 {
     public interface IHashStore
     {
-        IReadOnlyList<FileVersionInfo> GetAll();
+        IReadOnlyList<VersionInfo> GetAll();
         //void Load();
-        void UpdateAll(IReadOnlyList<FileItemViewModel> files);
+        void UpdateAll(IReadOnlyList<FileSystemEntry> files);
     }
 
     public class HashStore : IHashStore
@@ -14,7 +14,7 @@ namespace FileChecks.Models
         private readonly object _lock = new();
         private readonly string _filePath;
 
-        private List<FileVersionInfo> _content = new();
+        private List<VersionInfo> _content = new();
 
         public HashStore(IHostEnvironment env)
         {
@@ -35,17 +35,17 @@ namespace FileChecks.Models
                 return;
 
             var json = File.ReadAllText(_filePath);
-            _content = JsonSerializer.Deserialize<List<FileVersionInfo>>(json) ?? new();
+            _content = JsonSerializer.Deserialize<List<VersionInfo>>(json) ?? new();
 
         }
-        public IReadOnlyList<FileVersionInfo> GetAll()
+        public IReadOnlyList<VersionInfo> GetAll()
         {
             lock (_lock)
             {
                 return _content.ToList();
             }
         }
-        public void UpdateAll(IReadOnlyList<FileItemViewModel> files)
+        public void UpdateAll(IReadOnlyList<FileSystemEntry> files)
         {
             lock (_lock)
             {
@@ -65,7 +65,7 @@ namespace FileChecks.Models
                 SaveUnsafe();
             }
         }
-        private void UpsertUnsafe(FileItemViewModel file)
+        private void UpsertUnsafe(IFSEntry file)
         {
             var existing = _content.FirstOrDefault(f => f.FullName == file.FullName);
 
