@@ -42,7 +42,7 @@ namespace FileChecks.Controllers
         public IActionResult Index()
         {
             var versionManager = _factory.Create();
-            versionManager.Start(string.Empty);
+            //versionManager.Start(string.Empty);
 
             return View(versionManager);
         }
