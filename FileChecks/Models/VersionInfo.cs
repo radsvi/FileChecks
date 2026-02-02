@@ -1,5 +1,10 @@
-﻿namespace FileChecks.Models
+﻿using System.Text.Json.Serialization;
+
+namespace FileChecks.Models
 {
+    [JsonPolymorphic(TypeDiscriminatorPropertyName = "$type")] // Optional: customizes the key name
+    [JsonDerivedType(typeof(FileVersionInfo), typeDiscriminator: "file")]
+    [JsonDerivedType(typeof(FolderVersionInfo), typeDiscriminator: "folder")]
     public interface IVersionInfo
     {
         string FullName { get; set; }

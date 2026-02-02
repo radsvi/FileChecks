@@ -79,22 +79,29 @@
 				</tr>
 			</thead>
 			<tbody>
-				@foreach (var file in Model.StoredVersions)
+				@foreach (var entry in Model.StoredVersions)
 				{
-					<tr class="@(file.IsPresent ? "" : "deleted-row")">
+					<tr class="@(entry.IsPresent ? "" : "deleted-row")">
 						<td>
-							@file.Name
-							@if (file.IsNewEntry == true)
+							@entry.Name
+							@if (entry.IsNewEntry == true)
 							{
 								<span class="badge bg-success ms-2">New!</span>
 							}
 						</td>
-						
-						<td>@file.LastModified.ToString("yyyy-MM-dd HH:mm")</td>
-						<td>@((file.Size / 1024m).ToString("0.##")) KB</td>
-						<td>@file.Version</td>
+						<td>@entry.LastModified.ToString("yyyy-MM-dd HH:mm")</td>
+						@if (entry is FileVersionInfo file)
+						{
+							<td>@((file.Size / 1024m).ToString("0.##")) KB</td>
+							<td>@file.Version</td>
+						}
+						else
+						{
+							<td colspan="2"></td>
+						}
+
 						<td>
-							@if (@file.IsPresent == false)
+							@if (entry.IsPresent == false)
 							{
 								<span class="badge bg-danger ms-2">Deleted</span>
 							}

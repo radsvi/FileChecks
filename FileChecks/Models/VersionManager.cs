@@ -32,8 +32,6 @@ namespace FileChecks.Models
 
         private void StoreVersions()
         {
-
-            // Content
             if (Content == null) throw new NullReferenceException($"{nameof(Content)} is null");
 
             this.hashStore.UpdateAll(Content.Files);
@@ -54,7 +52,7 @@ namespace FileChecks.Models
                         info.Name,
                         info.FullName,
                         info.LastWriteTime,
-                        false);
+                        true);
                 })
                 .Cast<IFileSystemEntry>().ToList();
 
@@ -83,7 +81,7 @@ namespace FileChecks.Models
                 CurrentPath = path ?? "",
                 ParentPath = Path.GetDirectoryName(path),
 
-                Files = (IReadOnlyList<IFileSystemEntry>)folders.Concat(files)
+                Files = folders.Concat(files).ToList()
 
 
             };

@@ -73,19 +73,8 @@ namespace FileChecks.Models
             {
                 IVersionInfo entry;
 
-                if (entity.IsContainer)
+                if (entity is FSFile file)
                 {
-                    entry = new FolderVersionInfo(
-                        entity.FullName,
-                        entity.Name,
-                        entity.LastModified,
-                        true,
-                        true,
-                        entity.IsContainer);
-                }
-                else
-                {
-                    var file = (FSFile)entity;
 
                     entry = new FileVersionInfo(
                         file.FullName,
@@ -97,6 +86,16 @@ namespace FileChecks.Models
                         file.Size,
                         1,
                         file.Hash);
+                }
+                else
+                {
+                    entry = new FolderVersionInfo(
+                        entity.FullName,
+                        entity.Name,
+                        entity.LastModified,
+                        true,
+                        true,
+                        entity.IsContainer);
                 }
 
                 _content.Add(entry);
