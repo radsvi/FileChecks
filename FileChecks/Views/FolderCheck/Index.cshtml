@@ -84,7 +84,7 @@
 					<tr class="@(file.IsPresent ? "" : "deleted-row")">
 						<td>
 							@file.Name
-							@if (file.NewEntry == true)
+							@if (file.IsNewEntry == true)
 							{
 								<span class="badge bg-success ms-2">New!</span>
 							}

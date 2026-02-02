@@ -54,7 +54,7 @@ namespace FileChecks.Models
                 foreach (var entry in _content)
                 {
                     entry.IsPresent = false;
-                    entry.NewEntry = false;
+                    entry.IsNewEntry = false;
                 }
 
                 foreach (var file in files)
