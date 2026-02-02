@@ -55,14 +55,13 @@ namespace FileChecks.Models
 
                 if (existing is null)
                 {
-                    var entry = new FileVersionInfo
-                    {
-                        FullName = file.FullName,
-                        Name = file.Name,
-                        Hash = file.Hash,
-                        Size = file.Size,
-                        LastModified = file.LastModified,
-                    };
+                    var entry = new FileVersionInfo(
+                        file.FullName,
+                        file.Name,
+                        file.Size,
+                        file.LastModified,
+                        file.Hash
+                        );
 
                     _content.Add(entry);
                 }

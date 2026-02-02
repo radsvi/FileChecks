@@ -2,10 +2,19 @@
 {
     public class FileItemViewModel
     {
+        public FileItemViewModel(string name, string fullName, long size, DateTime lastModified, byte[] hash)
+        {
+            Name = name;
+            FullName = fullName;
+            Size = size;
+            LastModified = lastModified;
+            Hash = hash;
+        }
+
         public string Name { get; set; } = "";
         public string FullName { get; set; } = "";
         public long Size { get; set; }
         public DateTime LastModified { get; set; }
-        public Byte[]? Hash { get; set; }
+        public Byte[] Hash { get; set; }
     }
 }
