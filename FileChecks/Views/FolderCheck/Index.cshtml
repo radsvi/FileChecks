@@ -1,26 +1,49 @@
-﻿@model FileChecks.Models.VersionManager
+﻿@* @model FileChecks.Models.VersionManager *@
+@* @model IReadOnlyList<FileChecks.Models.VersionManager.Directories> *@
+@model FileChecks.Models.VersionManager
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<meta name="viewport" content="width=device-width" />
+	<title>Index</title>
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 </head>
 <body>
 
-<h4>VersionManager</h4>
-<hr />
-<div class="row">
+	<h4>VersionManager</h4>
+	<hr />
+	@* <div class="row">
     <div class="col-md-4">
         @Model.Vystup
     </div>
-</div>
+</div> *@
+	<h3>Current folders:</h3>
+	<div>
+		<ul>
+
+			@foreach (var item in Model.Content.Directories)
+			{
+				<li>@item</li>
+			}
+		</ul>
+	</div>
+	<h3>Current files:</h3>
+	<div>
+		<ul>
+			@foreach (var item in Model.Content.Files)
+			{
+				<li>@item.FullName</li>
+			}
+		</ul>
+	</div>
 
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+	@section Scripts {
+		@{
+			await Html.RenderPartialAsync("_ValidationScriptsPartial");
+		}
+	}
 </body>
 </html>

@@ -27,7 +27,7 @@ namespace FileChecks.Controllers
 
             if (ModelState.IsValid)
             {
-                versionManager.ScanFolder();
+                versionManager.Start();
             }
 
             return View(versionManager);
@@ -36,7 +36,7 @@ namespace FileChecks.Controllers
         public IActionResult Index()
         {
             var versionManager = new VersionManager(string.Empty);
-            versionManager.ScanFolder();
+            versionManager.Start();
 
             return View(versionManager);
         }

@@ -5,7 +5,9 @@ namespace FileChecks.Models
     public class VersionManager
     {
         string _rootPath;
+        public string SafePath { get; private set; }
         public string Vystup { get; private set; } = string.Empty;
+        public DirectoryViewModel Content { get; private set; }
 
         public VersionManager(string folderPath)
         {
@@ -13,32 +15,36 @@ namespace FileChecks.Models
             _rootPath = "C:\\MyFolder";
         }
 
-        public void ScanFolder()
+        public void Start()
         {
-            Vystup = "sample text";
+            ScanFolder(string.Empty);
+
+
+            Vystup = $"{SafePath} + sample text";
+
+
         }
 
-        public void Browse(string? path)
+        public void ScanFolder(string? path)
         {
-            var root = _rootPath;
-            var safePath = ResolveSafePath(root, path);
+            SafePath = ResolveSafePath(_rootPath, path);
 
-            var model = new DirectoryViewModel
+            Content = new DirectoryViewModel
             {
                 CurrentPath = path ?? "",
                 ParentPath = Path.GetDirectoryName(path),
 
-                Directories = Directory.GetDirectories(safePath)
-                    .Select(Path.GetFileName)
+                Directories = Directory.GetDirectories(SafePath, "*", SearchOption.AllDirectories)
                     .ToList(),
 
-                Files = Directory.GetFiles(safePath)
+                Files = Directory.GetFiles(SafePath, "*", SearchOption.AllDirectories)
                     .Select(f =>
                     {
                         var info = new FileInfo(f);
                         return new FileItemViewModel
                         {
                             Name = info.Name,
+                            FullName = info.FullName,
                             Size = info.Length,
                             LastModified = info.LastWriteTime
                         };
@@ -48,6 +54,37 @@ namespace FileChecks.Models
 
             
         }
+
+        //public void Browse(string? path)
+        //{
+        //    var root = _rootPath;
+        //    var safePath = ResolveSafePath(root, path);
+
+        //    var model = new DirectoryViewModel
+        //    {
+        //        CurrentPath = path ?? "",
+        //        ParentPath = Path.GetDirectoryName(path),
+
+        //        Directories = Directory.GetDirectories(safePath)
+        //            .Select(Path.GetFileName)
+        //            .ToList(),
+
+        //        Files = Directory.GetFiles(safePath)
+        //            .Select(f =>
+        //            {
+        //                var info = new FileInfo(f);
+        //                return new FileItemViewModel
+        //                {
+        //                    Name = info.Name,
+        //                    Size = info.Length,
+        //                    LastModified = info.LastWriteTime
+        //                };
+        //            })
+        //            .ToList()
+        //    };
+
+
+        //}
         //public IActionResult Browse(string? path)
         //{
         //    var root = _rootPath;
