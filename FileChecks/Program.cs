@@ -1,3 +1,5 @@
+using FileChecks.Models;
+
 namespace FileChecks
 {
     public class Program
@@ -8,6 +10,9 @@ namespace FileChecks
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            //builder.Services.AddScoped<IWeatherService, WeatherService>();
+            builder.Services.AddSingleton<IHashStore, HashStore>();
 
             var app = builder.Build();
 

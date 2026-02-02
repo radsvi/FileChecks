@@ -4,27 +4,39 @@ namespace FileChecks.Models
 {
     public class VersionManager
     {
-        string _rootPath;
-        public string SafePath { get; private set; }
-        public DirectoryViewModel Content { get; private set; }
+        private readonly IHashStore hashStore;
 
-        public VersionManager(string folderPath)
+        string? _rootPath;
+
+        public string? SafePath { get; private set; }
+        public DirectoryViewModel? Content { get; private set; }
+
+        public VersionManager(IHashStore hashStore)
+        {
+            this.hashStore = hashStore;
+        }
+
+        public void Start(string folderPath)
         {
 #warning dodelat folderPath
             _rootPath = "C:\\MyFolder";
-        }
 
-        public void Start()
-        {
             ScanFolder(string.Empty);
 
+            StoreVersions();
 
 
+        }
 
+        private void StoreVersions()
+        {
+            
         }
 
         public void ScanFolder(string? path)
         {
+            if (_rootPath == null) throw new NullReferenceException($"{nameof(_rootPath)} is null");
+
             SafePath = ResolveSafePath(_rootPath, path);
 
             Content = new DirectoryViewModel
