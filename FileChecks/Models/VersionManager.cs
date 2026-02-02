@@ -11,7 +11,7 @@ namespace FileChecks.Models
 
         public string? SafePath { get; private set; }
         public DirectoryViewModel? Content { get; private set; }
-        public IReadOnlyList<VersionInfo>? StoredVersions { get; set; }
+        public IReadOnlyList<IVersionInfo>? StoredVersions { get; set; }
 
         public VersionManager(IHashStore hashStore)
         {
@@ -45,67 +45,48 @@ namespace FileChecks.Models
 
             SafePath = ResolveSafePath(_rootPath, path);
 
+            List<IFileSystemEntry> folders = Directory.GetDirectories(SafePath, "*", SearchOption.AllDirectories)
+                .Select(f =>
+                {
+                    var info = new FileInfo(f);
+
+                    return new FSFolder(
+                        info.Name,
+                        info.FullName,
+                        info.LastWriteTime,
+                        false);
+                })
+                .Cast<IFileSystemEntry>().ToList();
+
+            List<IFileSystemEntry> files = Directory.GetFiles(SafePath, "*", SearchOption.AllDirectories)
+                .Select(f =>
+                {
+                    var info = new FileInfo(f);
+
+                    using var stream = File.OpenRead(info.FullName);
+                    byte[] hash = SHA256.HashData(stream);
+
+                    return new FSFile(
+                        info.Name,
+                        info.FullName,
+                        info.LastWriteTime,
+                        false,
+                        info.Length,
+                        hash);
+                })
+                .Cast<IFileSystemEntry>().ToList();
+
+            IEnumerable<IFileSystemEntry> joinedLists = folders.Concat(files);
+
             Content = new DirectoryViewModel
             {
                 CurrentPath = path ?? "",
                 ParentPath = Path.GetDirectoryName(path),
 
-                Directories = Directory.GetDirectories(SafePath, "*", SearchOption.AllDirectories)
-                    .ToList(),
+                Files = (IReadOnlyList<IFileSystemEntry>)folders.Concat(files)
 
-                //Files = Directory.GetFiles(SafePath, "*", SearchOption.AllDirectories)
-                //    .Select(f =>
-                //    {
-                //        var info = new FileInfo(f);
 
-                //        using var stream = File.OpenRead(info.FullName);
-                //        byte[] hash = SHA256.HashData(stream);
-
-                //        return new FileItemViewModel(
-                //            info.Name,
-                //            info.FullName,
-                //            false,
-                //            info.Length,
-                //            info.LastWriteTime,
-                //            hash
-                //            );
-                //    })
-                //    .ToList(),
-
-    //            Files = Directory
-    //.GetDirectories(path)
-    //.Select(d => new
-    //{
-    //    Name = Path.GetFileName(d),
-    //    IsDirectory = true,
-    //    FullPath = d
-    //})
-    //.Concat(Directory.GetFiles(path)
-    //    .Select(f => new
-    //    {
-    //        Name = Path.GetFileName(f),
-    //        IsDirectory = false,
-    //        FullPath = f
-    //    }))
-    //.ToList()
             };
-
-            var qwer = Directory
-                .GetDirectories(path)
-                .Select(d => new FileItemViewModel
-                {
-                    Name = Path.GetFileName(d),
-                    IsContainer = true,
-                    FullName = d
-                }).ToList();
-            qwer.Concat(Directory.GetFiles(path)
-                    .Select(f => new
-                    {
-                        Name = Path.GetFileName(f),
-                        IsDirectory = false,
-                        FullPath = f
-                    }))
-                .ToList();
 
 
         }

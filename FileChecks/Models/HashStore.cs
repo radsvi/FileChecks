@@ -4,9 +4,9 @@ namespace FileChecks.Models
 {
     public interface IHashStore
     {
-        IReadOnlyList<VersionInfo> GetAll();
+        IReadOnlyList<IVersionInfo> GetAll();
         //void Load();
-        void UpdateAll(IReadOnlyList<FileSystemEntry> files);
+        void UpdateAll(IReadOnlyList<IFileSystemEntry> files);
     }
 
     public class HashStore : IHashStore
@@ -14,7 +14,7 @@ namespace FileChecks.Models
         private readonly object _lock = new();
         private readonly string _filePath;
 
-        private List<VersionInfo> _content = new();
+        private List<IVersionInfo> _content = new();
 
         public HashStore(IHostEnvironment env)
         {
@@ -35,17 +35,17 @@ namespace FileChecks.Models
                 return;
 
             var json = File.ReadAllText(_filePath);
-            _content = JsonSerializer.Deserialize<List<VersionInfo>>(json) ?? new();
+            _content = JsonSerializer.Deserialize<List<IVersionInfo>>(json) ?? new();
 
         }
-        public IReadOnlyList<VersionInfo> GetAll()
+        public IReadOnlyList<IVersionInfo> GetAll()
         {
             lock (_lock)
             {
                 return _content.ToList();
             }
         }
-        public void UpdateAll(IReadOnlyList<FileSystemEntry> files)
+        public void UpdateAll(IReadOnlyList<IFileSystemEntry> files)
         {
             lock (_lock)
             {
@@ -65,36 +65,59 @@ namespace FileChecks.Models
                 SaveUnsafe();
             }
         }
-        private void UpsertUnsafe(IFSEntry file)
+        private void UpsertUnsafe(IFileSystemEntry entity)
         {
-            var existing = _content.FirstOrDefault(f => f.FullName == file.FullName);
+            var existing = _content.FirstOrDefault(f => f.FullName == entity.FullName);
 
             if (existing is null)
             {
-                var entry = new FileVersionInfo(
-                    file.FullName,
-                    file.Name,
-                    file.Size,
-                    file.LastModified,
-                    file.isContainer,
-                    file.Hash,
-                    true,
-                    true
-                    );
+                IVersionInfo entry;
+
+                if (entity.IsContainer)
+                {
+                    entry = new FolderVersionInfo(
+                        entity.FullName,
+                        entity.Name,
+                        entity.LastModified,
+                        true,
+                        true,
+                        entity.IsContainer);
+                }
+                else
+                {
+                    var file = (FSFile)entity;
+
+                    entry = new FileVersionInfo(
+                        file.FullName,
+                        file.Name,
+                        file.LastModified,
+                        true,
+                        true,
+                        file.IsContainer,
+                        file.Size,
+                        1,
+                        file.Hash);
+                }
 
                 _content.Add(entry);
             }
             else
             {
-                existing.LastModified = file.LastModified;
-                existing.Size = file.Size;
+                existing.LastModified = entity.LastModified;
+                //existing.Size = entity.Size;
                 existing.IsPresent = true;
 
-                if (!existing.Hash.SequenceEqual(file.Hash))
+                if (existing is FileVersionInfo existingEntry && entity is FileVersionInfo file)
                 {
-                    existing.Hash = file.Hash;
-                    existing.Version++;
+                    existingEntry.Size = file.Size;
+
+                    if (!existingEntry.Hash.SequenceEqual(file.Hash))
+                    {
+                        existingEntry.Hash = file.Hash;
+                        existingEntry.Version++;
+                    }
                 }
+
             }
         }
         //public void Update(FileVersionInfo file)
