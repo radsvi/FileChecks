@@ -9,6 +9,7 @@
 	<meta name="viewport" content="width=device-width" />
 	<title>Index</title>
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
 
@@ -80,10 +81,10 @@
 			<tbody>
 				@foreach (var file in Model.StoredVersions)
 				{
-					<tr>
+					<tr class="@(file.IsPresent ? "" : "deleted-row")">
 						<td>
 							@file.Name
-							@if (file.Version == 1)
+							@if (file.NewEntry == true)
 							{
 								<span class="badge bg-success ms-2">New!</span>
 							}
@@ -92,7 +93,7 @@
 						<td>@((file.Size / 1024m).ToString("0.##")) KB</td>
 						<td>@file.Version</td>
 						<td>
-							@if (@file.Present == false)
+							@if (@file.IsPresent == false)
 							{
 								<span class="badge bg-danger ms-2">Deleted</span>
 							}

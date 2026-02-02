@@ -52,12 +52,17 @@ namespace FileChecks.Models
                 Load();
 
                 foreach (var entry in _content)
-                    entry.Present = false;
+                {
+                    entry.IsPresent = false;
+                    entry.NewEntry = false;
+                }
 
                 foreach (var file in files)
                 {
                     UpsertUnsafe(file);
                 }
+
+                SaveUnsafe();
             }
         }
         private void UpsertUnsafe(FileItemViewModel file)
@@ -72,6 +77,7 @@ namespace FileChecks.Models
                     file.Size,
                     file.LastModified,
                     file.Hash,
+                    true,
                     true
                     );
 
@@ -81,7 +87,7 @@ namespace FileChecks.Models
             {
                 existing.LastModified = file.LastModified;
                 existing.Size = file.Size;
-                existing.Present = true;
+                existing.IsPresent = true;
 
                 if (!existing.Hash.SequenceEqual(file.Hash))
                 {
@@ -89,8 +95,6 @@ namespace FileChecks.Models
                     existing.Version++;
                 }
             }
-
-            SaveUnsafe();
         }
         //public void Update(FileVersionInfo file)
         //{

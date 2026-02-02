@@ -2,14 +2,15 @@
 {
     public class FileVersionInfo
     {
-        public FileVersionInfo(string fullName, string name, long size, DateTime lastModified, byte[] hash, bool present)
+        public FileVersionInfo(string fullName, string name, long size, DateTime lastModified, byte[] hash, bool isPresent, bool newEntry)
         {
             FullName = fullName;
             Name = name;
             Size = size;
             LastModified = lastModified;
             Hash = hash;
-            Present = present;
+            IsPresent = isPresent;
+            NewEntry = newEntry;
         }
 
         public string FullName { get; set; } = string.Empty;
@@ -18,6 +19,7 @@
         public DateTime LastModified { get; set; }
         public Byte[] Hash { get; set; }
         public int Version { get; set; } = 1;
-        public bool Present { get; set; }
+        public bool IsPresent { get; set; }
+        public bool NewEntry { get; set; }
     }
 }
