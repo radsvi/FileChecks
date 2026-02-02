@@ -17,7 +17,7 @@
 		<form asp-action="Index" method="post">
 			<div class="mb-3">
 				<label asp-for="SubFolderPath" class="form-label"></label>
-				<input asp-for="SubFolderPath" class="form-control" placeholder="path in C:\MyFolder" value="SubFolder" />
+				<input asp-for="SubFolderPath" class="form-control" placeholder="path in C:\MyFolder" />
 				<span asp-validation-for="SubFolderPath" class="text-danger"></span>
 			</div>
 			<input type="submit" value="Scan files" class="btn btn-primary" />
@@ -86,7 +86,6 @@
 					<th>Size</th>
 					<th>Last Modified</th>
 					<th>Version</th>
-					<th>Deleted?</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -99,6 +98,10 @@
 							{
 								<span class="badge bg-success ms-2">New!</span>
 							}
+							@if (entry.IsPresent == false)
+							{
+								<span class="badge bg-danger ms-2">Deleted</span>
+							}
 						</td>
 						@if (entry is FileVersionInfo file)
 						{
@@ -110,12 +113,6 @@
 							<td colspan="2">&lt;DIR&gt;</td>
 						}
 						<td>@entry.LastModified.ToString("yyyy-MM-dd HH:mm")</td>
-						<td>
-							@if (entry.IsPresent == false)
-							{
-								<span class="badge bg-danger ms-2">Deleted</span>
-							}
-						</td>
 					</tr>
 				}
 			</tbody>
