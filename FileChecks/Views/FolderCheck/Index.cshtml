@@ -39,6 +39,59 @@
 		</div>
 	}
 
+	<h3>Hash Stored List:</h3>
+	@if (Model.StoredVersions?.Any() == true)
+	{
+		<div>
+			<ul>
+				@foreach (var item in Model.StoredVersions)
+				{
+					<li>@item.FullName</li>
+				}
+			</ul>
+		</div>
+	}
+
+	<h3>Hash Stored List:</h3>
+	@if (Model.StoredVersions?.Any() == true)
+	{
+@* 		<div class="list-group">
+			@foreach (var file in Model.StoredVersions)
+			{
+				<div class="list-group-item">
+					<strong>@file.Name</strong> <br />
+					Last Modified: @file.LastModified <br />
+					Size: @file.Size KB <br />
+					Version @file.Version
+				</div>
+			}
+		</div> *@
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>File Name</th>
+					<th>Last Modified</th>
+					<th>Size</th>
+					<th>Version</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var file in Model.StoredVersions)
+				{
+					<tr>
+						<td>@file.Name</td>
+						<td>@file.LastModified.ToString("yyyy-MM-dd HH:mm")</td>
+						<td>@((file.Size / 1024m).ToString("0.##")) KB</td>
+						<td>@file.Version</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+
+
+
 
 	@section Scripts {
 		@{

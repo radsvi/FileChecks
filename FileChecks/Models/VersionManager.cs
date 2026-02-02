@@ -11,7 +11,7 @@ namespace FileChecks.Models
 
         public string? SafePath { get; private set; }
         public DirectoryViewModel? Content { get; private set; }
-        public List<FileVersionInfo>? StoredVersions { get; set; }
+        public IReadOnlyList<FileVersionInfo>? StoredVersions { get; set; }
 
         public VersionManager(IHashStore hashStore)
         {
@@ -27,7 +27,7 @@ namespace FileChecks.Models
 
             StoreVersions();
 
-            hashStore.GetAll();
+            StoredVersions = hashStore.GetAll();
         }
 
         private void StoreVersions()

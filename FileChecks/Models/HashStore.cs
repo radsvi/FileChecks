@@ -42,7 +42,7 @@ namespace FileChecks.Models
         {
             lock (_lock)
             {
-                return _content;
+                return _content.ToList();
             }
         }
         public void Upsert(FileItemViewModel file)

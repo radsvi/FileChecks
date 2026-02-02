@@ -482,3 +482,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Exclude json in Data
+FileChecks/Data/**/*.json
