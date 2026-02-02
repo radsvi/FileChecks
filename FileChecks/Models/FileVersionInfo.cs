@@ -2,12 +2,13 @@
 {
     public class FileVersionInfo
     {
-        public FileVersionInfo(string fullName, string name, long size, DateTime lastModified, byte[] hash, bool isPresent, bool isNewEntry)
+        public FileVersionInfo(string fullName, string name, long size, DateTime lastModified, bool isContainer, byte[] hash, bool isPresent, bool isNewEntry)
         {
             FullName = fullName;
             Name = name;
             Size = size;
             LastModified = lastModified;
+            IsContainer = isContainer;
             Hash = hash;
             IsPresent = isPresent;
             IsNewEntry = isNewEntry;

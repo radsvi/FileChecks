@@ -64,6 +64,7 @@ namespace FileChecks.Models
                         return new FileItemViewModel(
                             info.Name,
                             info.FullName,
+                            false,
                             info.Length,
                             info.LastWriteTime,
                             hash

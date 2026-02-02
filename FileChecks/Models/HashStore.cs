@@ -76,6 +76,7 @@ namespace FileChecks.Models
                     file.Name,
                     file.Size,
                     file.LastModified,
+                    file.isContainer,
                     file.Hash,
                     true,
                     true
