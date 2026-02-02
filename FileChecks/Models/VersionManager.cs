@@ -6,7 +6,6 @@ namespace FileChecks.Models
     {
         string _rootPath;
         public string SafePath { get; private set; }
-        public string Vystup { get; private set; } = string.Empty;
         public DirectoryViewModel Content { get; private set; }
 
         public VersionManager(string folderPath)
@@ -20,7 +19,6 @@ namespace FileChecks.Models
             ScanFolder(string.Empty);
 
 
-            Vystup = $"{SafePath} + sample text";
 
 
         }
