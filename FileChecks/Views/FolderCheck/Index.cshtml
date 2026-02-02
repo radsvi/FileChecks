@@ -80,7 +80,13 @@
 				@foreach (var file in Model.StoredVersions)
 				{
 					<tr>
-						<td>@file.Name</td>
+						<td>
+							@file.Name
+							@if (file.Version == 1)
+							{
+								<span class="badge bg-success ms-2">New!</span>
+							}
+						</td>
 						<td>@file.LastModified.ToString("yyyy-MM-dd HH:mm")</td>
 						<td>@((file.Size / 1024m).ToString("0.##")) KB</td>
 						<td>@file.Version</td>
