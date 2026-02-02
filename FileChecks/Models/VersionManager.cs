@@ -36,10 +36,7 @@ namespace FileChecks.Models
             // Content
             if (Content == null) throw new NullReferenceException($"{nameof(Content)} is null");
 
-            foreach (var entry in Content.Files)
-            {
-                this.hashStore.Upsert(entry);
-            }
+            this.hashStore.UpdateAll(Content.Files);
         }
 
         public void ScanFolder(string? path)

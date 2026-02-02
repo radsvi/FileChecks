@@ -74,6 +74,7 @@
 					<th>Last Modified</th>
 					<th>Size</th>
 					<th>Version</th>
+					<th>Deleted</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -90,6 +91,12 @@
 						<td>@file.LastModified.ToString("yyyy-MM-dd HH:mm")</td>
 						<td>@((file.Size / 1024m).ToString("0.##")) KB</td>
 						<td>@file.Version</td>
+						<td>
+							@if (@file.Present == false)
+							{
+								<span class="badge bg-danger ms-2">Deleted</span>
+							}
+						</td>
 					</tr>
 				}
 			</tbody>

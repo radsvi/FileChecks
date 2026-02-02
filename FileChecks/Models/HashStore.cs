@@ -6,7 +6,7 @@ namespace FileChecks.Models
     {
         IReadOnlyList<FileVersionInfo> GetAll();
         //void Load();
-        void Upsert(FileItemViewModel file);
+        void UpdateAll(IReadOnlyList<FileItemViewModel> files);
     }
 
     public class HashStore : IHashStore
@@ -45,42 +45,52 @@ namespace FileChecks.Models
                 return _content.ToList();
             }
         }
-        public void Upsert(FileItemViewModel file)
+        public void UpdateAll(IReadOnlyList<FileItemViewModel> files)
         {
             lock (_lock)
             {
                 Load();
 
-                var existing = _content.FirstOrDefault(f => f.FullName == file.FullName);
+                foreach (var entry in _content)
+                    entry.Present = false;
 
-                if (existing is null)
+                foreach (var file in files)
                 {
-                    var entry = new FileVersionInfo(
-                        file.FullName,
-                        file.Name,
-                        file.Size,
-                        file.LastModified,
-                        file.Hash
-                        );
-
-                    _content.Add(entry);
+                    UpsertUnsafe(file);
                 }
-                else
-                {
-                    existing.LastModified = file.LastModified;
-                    existing.Size = file.Size;
-                    
-                    if (!existing.Hash.SequenceEqual(file.Hash))
-                    {
-                        existing.Hash = file.Hash;
-                        existing.Version++;
-                    }
-                    
-
-                }
-
-                SaveUnsafe();
             }
+        }
+        private void UpsertUnsafe(FileItemViewModel file)
+        {
+            var existing = _content.FirstOrDefault(f => f.FullName == file.FullName);
+
+            if (existing is null)
+            {
+                var entry = new FileVersionInfo(
+                    file.FullName,
+                    file.Name,
+                    file.Size,
+                    file.LastModified,
+                    file.Hash,
+                    true
+                    );
+
+                _content.Add(entry);
+            }
+            else
+            {
+                existing.LastModified = file.LastModified;
+                existing.Size = file.Size;
+                existing.Present = true;
+
+                if (!existing.Hash.SequenceEqual(file.Hash))
+                {
+                    existing.Hash = file.Hash;
+                    existing.Version++;
+                }
+            }
+
+            SaveUnsafe();
         }
         //public void Update(FileVersionInfo file)
         //{
