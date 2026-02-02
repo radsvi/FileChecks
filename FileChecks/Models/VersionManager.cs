@@ -60,12 +60,16 @@ namespace FileChecks.Models
                     .Select(f =>
                     {
                         var info = new FileInfo(f);
+
+                        using var stream = File.OpenRead(info.FullName);
+                        byte[] hash = SHA256.HashData(stream);
+
                         return new FileItemViewModel(
                             info.Name,
                             info.FullName,
                             info.Length,
                             info.LastWriteTime,
-                            SHA256.HashData(File.OpenRead(info.FullName))
+                            hash
                             );
                     })
                     .ToList()
