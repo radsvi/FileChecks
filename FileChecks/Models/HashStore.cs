@@ -69,9 +69,21 @@ namespace FileChecks.Models
                 else
                 {
                     existing.LastModified = file.LastModified;
-                    existing.Hash = file.Hash;
                     existing.Size = file.Size;
-                    existing.Version++;
+                    
+                    if (existing.Hash is not null && file.Hash is not null)
+                    {
+                        if (existing.Hash.SequenceEqual(file.Hash))
+                        {
+                            existing.Hash = file.Hash;
+                            existing.Version++;
+                        }
+                    }
+                    else
+                    {
+
+                    }
+
                 }
 
                 SaveUnsafe();
