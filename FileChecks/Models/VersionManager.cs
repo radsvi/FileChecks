@@ -7,21 +7,28 @@ namespace FileChecks.Models
     {
         private readonly IHashStore hashStore;
 
-        string? _rootPath;
 
         public string? SafePath { get; private set; }
         public DirectoryViewModel? Content { get; private set; }
+        public string SubFolderPath { get; private set; } = string.Empty;
         public IReadOnlyList<IVersionInfo>? StoredVersions { get; set; }
+        public List<string?> CheckedFolders { get; private set; } = [];
 
         public VersionManager(IHashStore hashStore)
         {
             this.hashStore = hashStore;
         }
 
-        public void Start(string folderPath)
+        public void Start(string subFolderPath)
         {
-#warning dodelat folderPath
-            _rootPath = "C:\\MyFolder";
+            const string rootPath = "C:\\MyFolder";
+
+            SubFolderPath = subFolderPath;
+
+            SafePath = ResolveSafePath(rootPath, SubFolderPath);
+
+            if (!Directory.Exists(SafePath))
+                return;
 
             ScanFolder(string.Empty);
 
@@ -34,14 +41,18 @@ namespace FileChecks.Models
         {
             if (Content == null) throw new NullReferenceException($"{nameof(Content)} is null");
 
-            this.hashStore.UpdateAll(Content.Files);
+            this.hashStore.UpdateAll(Content.Files, CheckedFolders);
         }
 
         public void ScanFolder(string? path)
         {
-            if (_rootPath == null) throw new NullReferenceException($"{nameof(_rootPath)} is null");
+            if (SafePath == null) throw new NullReferenceException($"{nameof(SafePath)} is null");
 
-            SafePath = ResolveSafePath(_rootPath, path);
+            //List<string?> checkedFolders = Directory.GetDirectories(SafePath).Select(Path.GetFullPath).ToList();
+            //checkedFolders.Add(SafePath);
+
+            CheckedFolders.Add(SafePath);
+            Directory.GetDirectories(SafePath, "*", SearchOption.AllDirectories).ToList().ForEach(f => CheckedFolders.Add(f));
 
             List<IFileSystemEntry> folders = Directory.GetDirectories(SafePath, "*", SearchOption.AllDirectories)
                 .Select(f =>
@@ -51,6 +62,7 @@ namespace FileChecks.Models
                     return new FSFolder(
                         info.Name,
                         info.FullName,
+                        info.DirectoryName ?? throw new InvalidOperationException("File has no directory"),
                         info.LastWriteTime,
                         true);
                 })
@@ -67,6 +79,7 @@ namespace FileChecks.Models
                     return new FSFile(
                         info.Name,
                         info.FullName,
+                        info.DirectoryName ?? throw new InvalidOperationException("File has no directory"),
                         info.LastWriteTime,
                         false,
                         info.Length,

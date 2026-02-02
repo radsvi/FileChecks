@@ -6,7 +6,7 @@ namespace FileChecks.Models
     {
         IReadOnlyList<IVersionInfo> GetAll();
         //void Load();
-        void UpdateAll(IReadOnlyList<IFileSystemEntry> files);
+        void UpdateAll(IReadOnlyList<IFileSystemEntry> files, List<string?> checkedFolders);
     }
 
     public class HashStore : IHashStore
@@ -45,7 +45,7 @@ namespace FileChecks.Models
                 return _content.ToList();
             }
         }
-        public void UpdateAll(IReadOnlyList<IFileSystemEntry> files)
+        public void UpdateAll(IReadOnlyList<IFileSystemEntry> files, List<string?> checkedFolders)
         {
             lock (_lock)
             {
@@ -53,7 +53,10 @@ namespace FileChecks.Models
 
                 foreach (var entry in _content)
                 {
-                    entry.IsPresent = false;
+                    if (checkedFolders.Contains(entry.Path))
+                    {
+                        entry.IsPresent = false;
+                    }
                     entry.IsNewEntry = false;
                 }
 
@@ -79,6 +82,7 @@ namespace FileChecks.Models
                     entry = new FileVersionInfo(
                         file.FullName,
                         file.Name,
+                        file.Path,
                         file.LastModified,
                         true,
                         true,
@@ -91,6 +95,7 @@ namespace FileChecks.Models
                     entry = new FolderVersionInfo(
                         entity.FullName,
                         entity.Name,
+                        entity.Path,
                         entity.LastModified,
                         true,
                         true);

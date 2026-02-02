@@ -13,6 +13,17 @@
 </head>
 <body>
 
+	<div class="form-group mt-3">
+		<form asp-action="Index" method="post">
+			<div class="mb-3">
+				<label asp-for="SubFolderPath" class="form-label"></label>
+				<input asp-for="SubFolderPath" class="form-control" placeholder="path in C:\MyFolder" value="SubFolder" />
+				<span asp-validation-for="SubFolderPath" class="text-danger"></span>
+			</div>
+			<input type="submit" value="Scan files" class="btn btn-primary" />
+		</form>
+	</div>
+
 	<h4>Versions</h4>
 	@* <hr />
 	<h3>Current folders:</h3>
@@ -72,8 +83,8 @@
 			<thead>
 				<tr>
 					<th>File Name</th>
-					<th>Last Modified</th>
 					<th>Size</th>
+					<th>Last Modified</th>
 					<th>Version</th>
 					<th>Deleted?</th>
 				</tr>
@@ -83,13 +94,12 @@
 				{
 					<tr class="@(entry.IsPresent ? "" : "deleted-row")">
 						<td>
-							@entry.Name
+							@entry.FullName
 							@if (entry.IsNewEntry == true)
 							{
 								<span class="badge bg-success ms-2">New!</span>
 							}
 						</td>
-						<td>@entry.LastModified.ToString("yyyy-MM-dd HH:mm")</td>
 						@if (entry is FileVersionInfo file)
 						{
 							<td>@((file.Size / 1024m).ToString("0.##")) KB</td>
@@ -99,7 +109,7 @@
 						{
 							<td colspan="2">&lt;DIR&gt;</td>
 						}
-
+						<td>@entry.LastModified.ToString("yyyy-MM-dd HH:mm")</td>
 						<td>
 							@if (entry.IsPresent == false)
 							{
