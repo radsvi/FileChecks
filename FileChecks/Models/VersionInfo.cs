@@ -12,17 +12,15 @@ namespace FileChecks.Models
         DateTime LastModified { get; set; }
         bool IsPresent { get; set; }
         bool IsNewEntry { get; set; }
-        bool IsContainer { get; set; }
     }
 
     public abstract class VersionInfo : IVersionInfo
     {
-        public VersionInfo(string fullName, string name, DateTime lastModified, bool isPresent, bool isNewEntry, bool isContainer)
+        public VersionInfo(string fullName, string name, DateTime lastModified, bool isPresent, bool isNewEntry)
         {
             FullName = fullName;
             Name = name;
             LastModified = lastModified;
-            IsContainer = isContainer;
             IsPresent = isPresent;
             IsNewEntry = isNewEntry;
         }
@@ -30,14 +28,13 @@ namespace FileChecks.Models
         public string FullName { get; set; } = string.Empty;
         public string Name { get; set; } = string.Empty;
         public DateTime LastModified { get; set; }
-        public bool IsContainer { get; set; }
         public bool IsPresent { get; set; }
         public bool IsNewEntry { get; set; }
     }
     public class FileVersionInfo : VersionInfo
     {
-        public FileVersionInfo(string fullName, string name, DateTime lastModified, bool isPresent, bool isNewEntry, bool isContainer, long size, int version, byte[] hash)
-            : base (fullName, name, lastModified, isPresent, isNewEntry, isContainer)
+        public FileVersionInfo(string fullName, string name, DateTime lastModified, bool isPresent, bool isNewEntry, long size, int version, byte[] hash)
+            : base (fullName, name, lastModified, isPresent, isNewEntry)
         {
             Size = size;
             Version = version;
@@ -50,7 +47,7 @@ namespace FileChecks.Models
     }
     public class FolderVersionInfo : VersionInfo
     {
-        public FolderVersionInfo(string fullName, string name, DateTime lastModified, bool isPresent, bool isNewEntry, bool isContainer)
-            : base(fullName, name, lastModified, isPresent, isNewEntry, isContainer) {}
+        public FolderVersionInfo(string fullName, string name, DateTime lastModified, bool isPresent, bool isNewEntry)
+            : base(fullName, name, lastModified, isPresent, isNewEntry) {}
     }
 }

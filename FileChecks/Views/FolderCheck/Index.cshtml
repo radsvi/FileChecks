@@ -13,8 +13,8 @@
 </head>
 <body>
 
-	<h4>VersionManager</h4>
-	<hr />
+	<h4>Versions</h4>
+	@* <hr />
 	<h3>Current folders:</h3>
 	@if (Model.Content?.Directories?.Any() == true)
 	{
@@ -38,7 +38,7 @@
 				}
 			</ul>
 		</div>
-	}
+	} 
 
 	<h3>Hash Stored List:</h3>
 	@if (Model.StoredVersions?.Any() == true)
@@ -51,9 +51,9 @@
 				}
 			</ul>
 		</div>
-	}
+	}*@
 
-	<h3>Hash Stored List:</h3>
+	
 	@if (Model.StoredVersions?.Any() == true)
 	{
 @* 		<div class="list-group">
@@ -75,7 +75,7 @@
 					<th>Last Modified</th>
 					<th>Size</th>
 					<th>Version</th>
-					<th>Deleted</th>
+					<th>Deleted?</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -97,7 +97,7 @@
 						}
 						else
 						{
-							<td colspan="2"></td>
+							<td colspan="2">&lt;DIR&gt;</td>
 						}
 
 						<td>

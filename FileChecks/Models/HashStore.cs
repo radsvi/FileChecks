@@ -82,7 +82,6 @@ namespace FileChecks.Models
                         file.LastModified,
                         true,
                         true,
-                        file.IsContainer,
                         file.Size,
                         1,
                         file.Hash);
@@ -94,8 +93,7 @@ namespace FileChecks.Models
                         entity.Name,
                         entity.LastModified,
                         true,
-                        true,
-                        entity.IsContainer);
+                        true);
                 }
 
                 _content.Add(entry);
