@@ -6,6 +6,12 @@ namespace FileChecks.Controllers
 {
     public class FolderCheckController : Controller
     {
+        private readonly IVersionManagerFactory _factory;
+        public FolderCheckController(IVersionManagerFactory factory)
+        {
+            _factory = factory;
+        }
+
         //[HttpPost]
         //public IActionResult Open()
         //{
@@ -23,11 +29,11 @@ namespace FileChecks.Controllers
         [HttpPost]
         public IActionResult Index(string folderPath)
         {
-            var versionManager = new VersionManager(folderPath);
+            var versionManager = _factory.Create();
 
             if (ModelState.IsValid)
             {
-                versionManager.Start();
+                versionManager.Start(folderPath);
             }
 
             return View(versionManager);
@@ -35,8 +41,8 @@ namespace FileChecks.Controllers
 
         public IActionResult Index()
         {
-            var versionManager = new VersionManager(string.Empty);
-            versionManager.Start();
+            var versionManager = _factory.Create();
+            versionManager.Start(string.Empty);
 
             return View(versionManager);
         }
