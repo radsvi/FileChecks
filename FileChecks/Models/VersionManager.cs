@@ -30,7 +30,7 @@ namespace FileChecks.Models
             if (!Directory.Exists(SafePath))
                 return;
 
-            ScanFolder(string.Empty);
+            ScanFolder(SafePath);
 
             StoreVersions();
 
@@ -46,15 +46,15 @@ namespace FileChecks.Models
 
         public void ScanFolder(string? path)
         {
-            if (SafePath == null) throw new NullReferenceException($"{nameof(SafePath)} is null");
+            if (path == null) throw new NullReferenceException($"{nameof(path)} is null");
 
             //List<string?> checkedFolders = Directory.GetDirectories(SafePath).Select(Path.GetFullPath).ToList();
             //checkedFolders.Add(SafePath);
 
-            CheckedFolders.Add(SafePath);
-            Directory.GetDirectories(SafePath, "*", SearchOption.AllDirectories).ToList().ForEach(f => CheckedFolders.Add(f));
+            CheckedFolders.Add(path);
+            Directory.GetDirectories(path, "*", SearchOption.AllDirectories).ToList().ForEach(f => CheckedFolders.Add(f));
 
-            List<IFileSystemEntry> folders = Directory.GetDirectories(SafePath, "*", SearchOption.AllDirectories)
+            List<IFileSystemEntry> folders = Directory.GetDirectories(path, "*", SearchOption.AllDirectories)
                 .Select(f =>
                 {
                     var info = new FileInfo(f);
@@ -68,7 +68,7 @@ namespace FileChecks.Models
                 })
                 .Cast<IFileSystemEntry>().ToList();
 
-            List<IFileSystemEntry> files = Directory.GetFiles(SafePath, "*", SearchOption.AllDirectories)
+            List<IFileSystemEntry> files = Directory.GetFiles(path, "*", SearchOption.AllDirectories)
                 .Select(f =>
                 {
                     var info = new FileInfo(f);
@@ -101,67 +101,6 @@ namespace FileChecks.Models
 
 
         }
-
-        //public void Browse(string? path)
-        //{
-        //    var root = _rootPath;
-        //    var safePath = ResolveSafePath(root, path);
-
-        //    var model = new DirectoryViewModel
-        //    {
-        //        CurrentPath = path ?? "",
-        //        ParentPath = Path.GetDirectoryName(path),
-
-        //        Directories = Directory.GetDirectories(safePath)
-        //            .Select(Path.GetFileName)
-        //            .ToList(),
-
-        //        Files = Directory.GetFiles(safePath)
-        //            .Select(f =>
-        //            {
-        //                var info = new FileInfo(f);
-        //                return new FileItemViewModel
-        //                {
-        //                    Name = info.Name,
-        //                    Size = info.Length,
-        //                    LastModified = info.LastWriteTime
-        //                };
-        //            })
-        //            .ToList()
-        //    };
-
-
-        //}
-        //public IActionResult Browse(string? path)
-        //{
-        //    var root = _rootPath;
-        //    var safePath = ResolveSafePath(root, path);
-
-        //    var model = new DirectoryViewModel
-        //    {
-        //        CurrentPath = path ?? "",
-        //        ParentPath = Path.GetDirectoryName(path),
-
-        //        Directories = Directory.GetDirectories(safePath)
-        //            .Select(Path.GetFileName)
-        //            .ToList(),
-
-        //        Files = Directory.GetFiles(safePath)
-        //            .Select(f =>
-        //            {
-        //                var info = new FileInfo(f);
-        //                return new FileItemViewModel
-        //                {
-        //                    Name = info.Name,
-        //                    Size = info.Length,
-        //                    LastModified = info.LastWriteTime
-        //                };
-        //            })
-        //            .ToList()
-        //    };
-
-        //    return View(model);
-        //}
         private static string ResolveSafePath(string root, string? relativePath)
         {
             var combined = Path.Combine(root, relativePath ?? "");
