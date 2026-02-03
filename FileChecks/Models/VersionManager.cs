@@ -10,7 +10,7 @@ namespace FileChecks.Models
 
         public string? SafePath { get; private set; }
         public DirectoryViewModel? Content { get; private set; }
-        public string? SubFolderPath { get; private set; }
+        public string? SubFolderPath { get; set; }
         public IReadOnlyList<IVersionInfo>? StoredVersions { get; set; }
         public List<string?> CheckedFolders { get; private set; } = [];
 

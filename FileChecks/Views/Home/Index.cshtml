@@ -15,9 +15,9 @@
 	<div class="form-group mt-3">
 		<form asp-controller="FolderCheck" asp-action="Index" method="post">
 			<div class="mb-3">
-				<label asp-for="FolderPath" class="form-label"></label>
-				<input asp-for="FolderPath" class="form-control" placeholder="path in C:\MyFolder" />
-				<span asp-validation-for="FolderPath" class="text-danger"></span>
+				<label asp-for="SubFolderPath" class="form-label"></label>
+				<input asp-for="SubFolderPath" class="form-control" placeholder="path in C:\MyFolder" />
+				<span asp-validation-for="SubFolderPath" class="text-danger"></span>
 			</div>
 			<input type="submit" value="Scan files" class="btn btn-primary" />
 		</form>

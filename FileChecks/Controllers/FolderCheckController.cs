@@ -27,13 +27,13 @@ namespace FileChecks.Controllers
         //    return RedirectToAction("Index");
         //}
         [HttpPost]
-        public IActionResult Index(string? folderPath)
+        public IActionResult Index(string? subFolderPath)
         {
             var versionManager = _factory.Create();
 
             if (ModelState.IsValid)
             {
-                versionManager.Start(folderPath);
+                versionManager.Start(subFolderPath);
             }
 
             return View(versionManager);

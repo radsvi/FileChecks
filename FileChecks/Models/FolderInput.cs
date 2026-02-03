@@ -2,6 +2,6 @@
 {
     public class FolderInput
     {
-        public string? FolderPath { get; set; }
+        public string? SubFolderPath { get; set; }
     }
 }
