@@ -1,23 +1,22 @@
-﻿@{
-	ViewData["Title"] = "Home Page";
-}
-@model FileChecks.Models.VersionManager
+﻿@model FileChecks.Models.VersionManager
 
 <!DOCTYPE html>
-<html lang="cs">
+
+<html>
 <head>
 	<meta name="viewport" content="width=device-width" />
-	<title>Home Page</title>
+	<title>Index</title>
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" />
 </head>
-
 <body>
+
 	<div class="form-group mt-3">
-		<form asp-controller="FolderCheck" asp-action="Index" method="post">
+		<form asp-action="Index" method="post">
 			<div class="mb-3">
 				<label asp-for="SubFolderPath" class="form-label"></label>
 				<div class="input-group">
-					<span class="input-group-text text-muted bg-light">@VersionManager.RootPath\</span>
+					<span class="input-group-text">@VersionManager.RootPath\</span>
 					<input asp-for="SubFolderPath" class="form-control border-secondary" />
 				</div>
 				<span asp-validation-for="SubFolderPath" class="text-danger"></span>
@@ -25,5 +24,54 @@
 			<input type="submit" value="Scan folder" class="btn btn-primary" />
 		</form>
 	</div>
+
+	@if (Model.StoredVersions?.Any() == true)
+	{
+		<hr />
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>File Name</th>
+					<th>Size</th>
+					<th>Version</th>
+					<th>Last Modified</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var entry in Model.StoredVersions)
+				{
+					<tr class="@(entry.IsPresent ? "" : "deleted-row")">
+						<td>
+							@entry.FullName
+							@if (entry.IsNewEntry == true)
+							{
+								<span class="badge bg-success ms-2">New!</span>
+							}
+							@if (entry.IsPresent == false)
+							{
+								<span class="badge bg-danger ms-2">Deleted</span>
+							}
+						</td>
+						@if (entry is FileVersionInfo file)
+						{
+							<td>@((file.Size / 1024m).ToString("0.##")) KB</td>
+							<td>@file.Version</td>
+						}
+						else
+						{
+							<td colspan="2">&lt;DIR&gt;</td>
+						}
+						<td>@entry.LastModified.ToString("yyyy-MM-dd HH:mm")</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+
+	@section Scripts {
+		@{
+			await Html.RenderPartialAsync("_ValidationScriptsPartial");
+		}
+	}
 </body>
 </html>
