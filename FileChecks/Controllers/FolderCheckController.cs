@@ -6,8 +6,8 @@ namespace FileChecks.Controllers
 {
     public class FolderCheckController : Controller
     {
-        private readonly IVersionsViewModelFactory _factory;
-        public FolderCheckController(IVersionsViewModelFactory factory)
+        private readonly IVersionManagerFactory _factory;
+        public FolderCheckController(IVersionManagerFactory factory)
         {
             _factory = factory;
         }

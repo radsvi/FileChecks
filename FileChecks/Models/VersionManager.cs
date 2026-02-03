@@ -1,22 +1,20 @@
 ﻿using FileChecks.ViewModels;
-using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 
 namespace FileChecks.Models
 {
-    public class VersionsViewModel
+    public class VersionManager
     {
         private readonly IHashStore hashStore;
 
 
         public string? SafePath { get; private set; }
         public DirectoryViewModel? Content { get; private set; }
-        [Display(Name = "Folder Path")]
         public string? SubFolderPath { get; private set; }
         public IReadOnlyList<IVersionInfo>? StoredVersions { get; set; }
         public List<string?> CheckedFolders { get; private set; } = [];
 
-        public VersionsViewModel(IHashStore hashStore)
+        public VersionManager(IHashStore hashStore)
         {
             this.hashStore = hashStore;
         }

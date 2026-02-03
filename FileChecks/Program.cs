@@ -12,8 +12,8 @@ namespace FileChecks
             builder.Services.AddControllersWithViews();
 
             //builder.Services.AddScoped<IWeatherService, WeatherService>();
-            builder.Services.AddSingleton<IVersionsViewModelFactory, VersionsViewModelFactory>();
-            builder.Services.AddSingleton<VersionsViewModel>();
+            builder.Services.AddSingleton<IVersionManagerFactory, VersionManagerFactory>();
+            builder.Services.AddSingleton<VersionManager>();
             builder.Services.AddSingleton<IHashStore, HashStore>();
 
             var app = builder.Build();
