@@ -7,7 +7,7 @@ namespace FileChecks.Models
     {
         private readonly IHashStore hashStore;
 
-
+        public const string RootPath = "C:\\TestFolder";
         public string? SafePath { get; private set; }
         public ContentViewModel? Content { get; private set; }
         public string? SubFolderPath { get; set; }
@@ -21,11 +21,11 @@ namespace FileChecks.Models
 
         public void Start(string? subFolderPath)
         {
-            const string rootPath = "C:\\MyFolder";
+            
 
             SubFolderPath = subFolderPath;
 
-            SafePath = ResolveSafePath(rootPath, SubFolderPath);
+            SafePath = ResolveSafePath(RootPath, SubFolderPath);
 
             if (!Directory.Exists(SafePath))
                 return;
