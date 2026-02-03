@@ -11,6 +11,10 @@
 	<link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
+	<blockquote class="p-3 rounded" style="background-color: #fff3cd; border-left: 5px solid #ffc107;">
+		<p class="mb-0">Rozhodl jsem se nezpřístupňovat celý filesystem, ale pouze složku @VersionManager.RootPath a jeji podsložky</p>
+		<p class="mb-0">Pro změnu stačí změnit konstantu RootPath ve třídě VersionManager</p>
+	</blockquote>
 
 	<div class="form-group mt-3">
 		<form asp-action="Index" method="post">
@@ -32,7 +36,7 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>File Name</th>
+					<th>Full Name</th>
 					<th>Size</th>
 					<th>Version</th>
 					<th>Last Modified</th>
