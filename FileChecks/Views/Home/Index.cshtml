@@ -1,7 +1,7 @@
 ﻿@{
 	ViewData["Title"] = "Home Page";
 }
-@model FileChecks.Models.FolderInput;
+@model FileChecks.Models.VersionManager
 
 <!DOCTYPE html>
 <html lang="cs">
@@ -16,10 +16,13 @@
 		<form asp-controller="FolderCheck" asp-action="Index" method="post">
 			<div class="mb-3">
 				<label asp-for="SubFolderPath" class="form-label"></label>
-				<input asp-for="SubFolderPath" class="form-control" placeholder="path in C:\MyFolder" />
+				<div class="input-group">
+					<span class="input-group-text text-muted bg-light">@VersionManager.RootPath\</span>
+					<input asp-for="SubFolderPath" class="form-control border-secondary" />
+				</div>
 				<span asp-validation-for="SubFolderPath" class="text-danger"></span>
 			</div>
-			<input type="submit" value="Scan folders" class="btn btn-primary" />
+			<input type="submit" value="Scan folder" class="btn btn-primary" />
 		</form>
 	</div>
 </body>

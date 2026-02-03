@@ -17,14 +17,17 @@
 		<form asp-action="Index" method="post">
 			<div class="mb-3">
 				<label asp-for="SubFolderPath" class="form-label"></label>
-				<input asp-for="SubFolderPath" class="form-control" placeholder="path in C:\MyFolder" />
+				<div class="input-group">
+					<span class="input-group-text">@VersionManager.RootPath\</span>
+					<input asp-for="SubFolderPath" class="form-control border-secondary" />
+				</div>
 				<span asp-validation-for="SubFolderPath" class="text-danger"></span>
 			</div>
-			<input type="submit" value="Scan folders" class="btn btn-primary" />
+			<input type="submit" value="Scan folder" class="btn btn-primary" />
 		</form>
 	</div>
 
-	<h4>Versions</h4>
+	<hr />
 	@* <hr />
 	<h3>Current folders:</h3>
 	@if (Model.Content?.Directories?.Any() == true)
@@ -84,8 +87,8 @@
 				<tr>
 					<th>File Name</th>
 					<th>Size</th>
-					<th>Last Modified</th>
 					<th>Version</th>
+					<th>Last Modified</th>
 				</tr>
 			</thead>
 			<tbody>
