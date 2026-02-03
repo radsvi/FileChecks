@@ -7,7 +7,7 @@ namespace FileChecks.Models
     {
         private readonly IHashStore hashStore;
 
-        public const string RootPath = "C:\\TestFolder";
+        public const string RootPath = @"C:\TestFolder";
         public string? SafePath { get; private set; }
         public ContentViewModel? Content { get; private set; }
         public string? SubFolderPath { get; set; }
