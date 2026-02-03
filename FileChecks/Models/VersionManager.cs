@@ -34,7 +34,8 @@ namespace FileChecks.Models
 
             StoreVersions();
 
-            StoredVersions = hashStore.GetAll();
+            //StoredVersions = hashStore.GetAll();
+            StoredVersions = hashStore.GetFolder(SafePath);
         }
 
         private void StoreVersions()

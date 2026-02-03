@@ -5,6 +5,7 @@ namespace FileChecks.Models
     public interface IHashStore
     {
         IReadOnlyList<IVersionInfo> GetAll();
+        IReadOnlyList<IVersionInfo> GetFolder(string path);
         //void Load();
         void UpdateAll(IReadOnlyList<IFileSystemEntry> files, List<string?> checkedFolders);
     }
@@ -43,6 +44,13 @@ namespace FileChecks.Models
             lock (_lock)
             {
                 return _content.ToList();
+            }
+        }
+        public IReadOnlyList<IVersionInfo> GetFolder(string path)
+        {
+            lock (_lock)
+            {
+                return _content.Where(entry => entry.Path.Contains(path, StringComparison.OrdinalIgnoreCase)).ToList();
             }
         }
         public void UpdateAll(IReadOnlyList<IFileSystemEntry> files, List<string?> checkedFolders)
