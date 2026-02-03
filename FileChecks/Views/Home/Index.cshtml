@@ -7,6 +7,7 @@
 	<meta name="viewport" content="width=device-width" />
 	<title>Index</title>
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 	<link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -42,6 +43,14 @@
 				{
 					<tr class="@(entry.IsPresent ? "" : "deleted-row")">
 						<td>
+							@if (entry is FolderVersionInfo)
+							{
+								<i class="bi bi-folder-fill text-warning me-2"></i>
+							}
+							else
+							{
+								<i class="bi bi-file-earmark-text me-2"></i>
+							}
 							@entry.FullName
 							@if (entry.IsNewEntry == true)
 							{
