@@ -51,7 +51,7 @@ namespace FileChecks.Models
 
             //List<string?> checkedFolders = Directory.GetDirectories(SafePath).Select(Path.GetFullPath).ToList();
             //checkedFolders.Add(SafePath);
-
+            CheckedFolders.Clear();
             CheckedFolders.Add(path);
             Directory.GetDirectories(path, "*", SearchOption.AllDirectories).ToList().ForEach(f => CheckedFolders.Add(f));
 

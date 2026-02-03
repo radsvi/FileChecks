@@ -117,7 +117,7 @@ namespace FileChecks.Models
                 //existing.Size = entity.Size;
                 existing.IsPresent = true;
 
-                if (existing is FileVersionInfo existingEntry && entity is FileVersionInfo file)
+                if (existing is FileVersionInfo existingEntry && entity is FSFile file)
                 {
                     existingEntry.Size = file.Size;
 
