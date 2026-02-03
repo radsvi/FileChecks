@@ -64,6 +64,7 @@ namespace FileChecks.Models
                     if (checkedFolders.Contains(entry.Path))
                     {
                         entry.IsPresent = false;
+                        entry.IsChanged = false;
                     }
                     entry.IsNewEntry = false;
                 }
@@ -125,6 +126,7 @@ namespace FileChecks.Models
                     {
                         existingEntry.Hash = file.Hash;
                         existingEntry.Version++;
+                        existingEntry.IsChanged = true;
                     }
                 }
 

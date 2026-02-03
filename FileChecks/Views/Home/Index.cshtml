@@ -60,6 +60,10 @@
 							{
 								<span class="badge bg-danger ms-2">Deleted</span>
 							}
+							@if (entry.IsChanged == true)
+							{
+								<span class="badge bg-warning ms-2">Changed</span>
+							}
 						</td>
 						@if (entry is FileVersionInfo file)
 						{

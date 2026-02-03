@@ -13,6 +13,7 @@ namespace FileChecks.Models
         DateTime LastModified { get; set; }
         bool IsPresent { get; set; }
         bool IsNewEntry { get; set; }
+        bool IsChanged { get; set; }
     }
 
     public abstract class VersionInfo : IVersionInfo
@@ -33,6 +34,7 @@ namespace FileChecks.Models
         public DateTime LastModified { get; set; }
         public bool IsPresent { get; set; }
         public bool IsNewEntry { get; set; }
+        public bool IsChanged { get; set; }
     }
     public class FileVersionInfo : VersionInfo
     {
