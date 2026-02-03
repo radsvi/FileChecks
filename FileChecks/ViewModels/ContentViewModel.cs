@@ -2,7 +2,7 @@
 
 namespace FileChecks.ViewModels
 {
-    public class DirectoryViewModel
+    public class ContentViewModel
     {
         public string CurrentPath { get; set; } = "";
         public string? ParentPath { get; set; }

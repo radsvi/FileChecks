@@ -9,7 +9,7 @@ namespace FileChecks.Models
 
 
         public string? SafePath { get; private set; }
-        public DirectoryViewModel? Content { get; private set; }
+        public ContentViewModel? Content { get; private set; }
         public string? SubFolderPath { get; set; }
         public IReadOnlyList<IVersionInfo>? StoredVersions { get; set; }
         public List<string?> CheckedFolders { get; private set; } = [];
@@ -90,7 +90,7 @@ namespace FileChecks.Models
 
             IEnumerable<IFileSystemEntry> joinedLists = folders.Concat(files);
 
-            Content = new DirectoryViewModel
+            Content = new ContentViewModel
             {
                 CurrentPath = path ?? "",
                 ParentPath = Path.GetDirectoryName(path),
