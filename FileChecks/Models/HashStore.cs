@@ -50,7 +50,32 @@ namespace FileChecks.Models
         {
             lock (_lock)
             {
-                return _content.Where(entry => entry.Path.Contains(path, StringComparison.OrdinalIgnoreCase)).ToList();
+                // tato cast je samozrejme neefektivni, ale predpokladame ze pracujeme maximalne s 100 soubory
+
+                var fullList = _content.Where(entry => entry.Path.Contains(path, StringComparison.OrdinalIgnoreCase));
+                var folders = fullList.Where(entry => entry is FolderVersionInfo);
+                var files = fullList.Where(entry => entry is FileVersionInfo).OrderBy(e => e.Name);
+                var finalList = new List<IVersionInfo>();
+
+                if (VersionManager.RootPath == path)
+                    AddFiles(files, finalList, path);
+
+                foreach (var folder in folders)
+                {
+                    finalList.Add(folder);
+                    AddFiles(files, finalList, folder.FullName);
+                }
+
+                return finalList.ToList();
+            }
+
+            static void AddFiles(IEnumerable<IVersionInfo> files, List<IVersionInfo> finalList, string folderPath)
+            {
+                foreach (var file in files)
+                {
+                    if (folderPath == file.Path)
+                        finalList.Add(file);
+                }
             }
         }
         public void UpdateAll(IReadOnlyList<IFileSystemEntry> files, List<string?> checkedFolders)
